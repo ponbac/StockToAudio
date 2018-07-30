@@ -7,5 +7,26 @@
 </head>
 <body>
 <h1>-Stock to Audio-</h1>
+<button onclick="playSound()">Play mp3</button>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+    $(function () {
+        $('a#test').bind('click', function () {
+            $.getJSON('/updateStock/',
+                function (data) {
+                    //do nothing
+                });
+            return false;
+        });
+    });
+</script>
+
+<div class='container'>
+    <form>
+        <a href=# id=test>
+            <button class='btn btn-default'>Update mp3</button>
+        </a>
+    </form>
+</div>
 </body>
 </html>

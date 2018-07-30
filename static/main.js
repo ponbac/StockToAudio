@@ -34,6 +34,9 @@ function playAudio(audio, volume) {
     }, 1);
 }
 
-console.log('Playing audio!');
-loadAudio();
-playAudio(sound, 0.1);
+
+function playSound() {
+    console.log('Playing audio!');
+    loadAudio();
+    playAudio(sound, 0.1);
+}

@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 from flask import Flask, render_template
 
 
-
 # Returns the change in value for a stock in percent (Today/Most recent number)
 # https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
 def get_stock_change(avanza_stock_url):
@@ -45,5 +44,13 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/updateStock/')
+def update_stock():
+    print('Updating stock audio file!')
+    text_to_audio(
+        "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+    return "Stock audio updated!"
+
+
 if __name__ == '__main__':
-    app.run(host='localhost')
+    app.run(host='192.168.1.160')

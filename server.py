@@ -2,12 +2,14 @@ from random import randint
 from gtts import gTTS
 import requests
 from bs4 import BeautifulSoup
+from flask import Flask, render_template
+
 
 
 # Returns the change in value for a stock in percent (Today/Most recent number)
 # https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
-def get_stock_change(stock_url):
-    url = stock_url
+def get_stock_change(avanza_stock_url):
+    url = avanza_stock_url
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
 
@@ -25,11 +27,23 @@ def get_stock_change(stock_url):
 # Creates mp3-file with given text
 def text_to_audio(text):
     tts = gTTS(text=text, lang='sv')
-    file_number = str(randint(0, 1000000))
-    tts.save(savefile="mp3/test" + file_number + ".mp3")
-    print("File test" + file_number + ".mp3 created")
+    # file_number = str(randint(0, 1000000))
+    tts.save(savefile="static/stock" + ".mp3")
+    print("File stock" + ".mp3 created")
 
 
 # Testing/Playing around
 text_to_audio(
-    "Testaktie: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+    "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+
+# Flask web-server
+app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+if __name__ == '__main__':
+    app.run(host='localhost')

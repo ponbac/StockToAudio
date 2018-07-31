@@ -32,8 +32,8 @@ def text_to_audio(text):
 
 
 # Testing/Playing around
-text_to_audio(
-    "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+# text_to_audio(
+# "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
 
 # Flask web-server
 app = Flask(__name__)
@@ -44,12 +44,17 @@ def index():
     return render_template('index.html')
 
 
+# @app.route('/updateStock/')
+# def update_stock():
+#     print('Updating stock audio file!')
+#     text_to_audio(
+#         "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+#     return "Stock audio updated!"
+
 @app.route('/updateStock/')
 def update_stock():
-    print('Updating stock audio file!')
-    text_to_audio(
-        "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
-    return "Stock audio updated!"
+    text_to_audio(str(randint(0, 20)))
+    return 'WDADADA'
 
 
 if __name__ == '__main__':

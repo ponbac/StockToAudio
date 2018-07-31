@@ -40,3 +40,16 @@ function playSound() {
     loadAudio();
     playAudio(sound, 0.1);
 }
+
+
+function refreshData() {
+    x = 8;  // 5 Seconds
+
+    $.getJSON('/updateStock/');
+
+    playSound()
+
+    setTimeout(refreshData, x * 1000);
+}
+
+refreshData();

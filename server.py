@@ -3,6 +3,26 @@ from gtts import gTTS
 import requests
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, make_response
+import os
+
+
+# Clear audio folder or create one if it doesnt exist
+def clear_audio_folder():
+    folder = os.getcwd() + '/static/audio'
+
+    if os.path.isdir(folder):
+        print('Clearing /static/audio folder!')
+
+        for the_file in os.listdir(folder):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(e)
+    else:
+        print('Creating /static/audio folder!')
+        os.makedirs(folder)
 
 
 # Returns the change in value for a stock in percent (Today/Most recent number)
@@ -24,7 +44,8 @@ def get_stock_change(avanza_stock_url):
 
 
 # Creates mp3-file with given text
-rand = 0
+rand = 0  # Stores random number from main.js
+
 
 def text_to_audio(text):
     global rand
@@ -42,6 +63,7 @@ def text_to_audio(text):
 app = Flask(__name__)
 
 
+# Index
 @app.route('/')
 def index():
     resp = make_response(render_template('index.html'))
@@ -51,21 +73,19 @@ def index():
     return resp
 
 
-# @app.route('/updateStock/')
-# def update_stock():
-#     print('Updating stock audio file!')
-#     text_to_audio(
-#         "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
-#     return "Stock audio updated!"
-
+# Called to create new stock audio file. File name = 'stock + random number from js + .mp3'
 @app.route('/updateStock/<rand_num>')
 def update_stock(rand_num):
     global rand
     rand = rand_num
-    text_to_audio(str(randint(0, 20)))
-    return str(rand)
+    print('Updating stock audio file!')
+    text_to_audio(
+        "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+    return "Stock audio updated!" + str(rand)
 
 
+# Start server
 if __name__ == '__main__':
-    # app.run(host='192.168.1.160')
-    app.run(host='localhost')
+    clear_audio_folder()
+    app.run(host='192.168.1.160')
+    # app.run(host='localhost')

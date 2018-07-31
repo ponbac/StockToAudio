@@ -42,12 +42,12 @@ function playAudio(audio, volume) {
 function playSound() {
     console.log('Playing sound!, randNum = ' + randNum);
     loadAudio();
-    playAudio(sound, 0.1);
+    playAudio(sound, 0.5);
 }
 
 
 function refreshData() {
-    x = 8;  // 8 Seconds
+    x = 120;  // 120 Seconds
 
     console.log('At playSound(), randNum = ' + randNum);
     playSound();

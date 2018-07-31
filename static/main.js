@@ -11,7 +11,7 @@ function loadAudio() {
     //Load the sound file (using a source element for expandability)
     var src = document.createElement("source");
     console.log('Going to read randNum! randNum = ' + randNum);
-    src.src = '/static/stock' + randNum + ".mp3";
+    src.src = '/static/audio/stock' + randNum + ".mp3";
     soundFile.appendChild(src);
 
     //Load the audio tag
@@ -47,14 +47,13 @@ function playSound() {
 
 
 function refreshData() {
-    x = 8;  // 5 Seconds
-
-    $.getJSON('/updateStock/' + randNum);
+    x = 8;  // 8 Seconds
 
     console.log('At playSound(), randNum = ' + randNum);
     playSound();
     randNum = Math.floor((Math.random() * 10000) + 1);
     console.log('Set new randNum = ' + randNum);
+    $.getJSON('/updateStock/' + randNum);
 
     setTimeout(refreshData, x * 1000);
 }

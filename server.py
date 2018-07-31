@@ -30,7 +30,7 @@ def text_to_audio(text):
     global rand
     tts = gTTS(text=text, lang='sv')
     # file_number = str(randint(0, 1000000))
-    tts.save(savefile="static/stock" + str(rand) + ".mp3")
+    tts.save(savefile="static/audio/stock" + str(rand) + ".mp3")
     print("File stock" + str(rand) + ".mp3 created")
 
 

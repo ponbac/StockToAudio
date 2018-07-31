@@ -24,11 +24,16 @@ def get_stock_change(avanza_stock_url):
 
 
 # Creates mp3-file with given text
+rand = randint(0, 1000000)
+
 def text_to_audio(text):
+    global rand
     tts = gTTS(text=text, lang='sv')
     # file_number = str(randint(0, 1000000))
-    tts.save(savefile="static/stock" + ".mp3")
-    print("File stock" + ".mp3 created")
+    tts.save(savefile="static/stock" + str(rand) + ".mp3")
+    print("File stock" + str(rand) + ".mp3 created")
+    # Generating new random filename
+    rand = randint(0, 1000000)
 
 
 # Testing/Playing around
@@ -41,7 +46,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', rand=str(rand))
 
 
 # @app.route('/updateStock/')

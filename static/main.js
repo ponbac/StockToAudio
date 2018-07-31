@@ -1,15 +1,17 @@
 console.log("main.js loaded!")
 
+var randNum = 10;
 var sound;
 
 function loadAudio() {
     //Create the audio tag
     var soundFile = document.createElement("audio");
-    soundFile.preload = "auto";
+    soundFile.preload = "none";
 
     //Load the sound file (using a source element for expandability)
     var src = document.createElement("source");
-    src.src = '/static/stock' + ".mp3";
+    console.log('Going to read randNum');
+    src.src = '/static/stock' + randNum + ".mp3";
     soundFile.appendChild(src);
 
     //Load the audio tag
@@ -47,7 +49,8 @@ function refreshData() {
 
     $.getJSON('/updateStock/');
 
-    playSound()
+    console.log('At playSound()');
+    playSound();
 
     setTimeout(refreshData, x * 1000);
 }

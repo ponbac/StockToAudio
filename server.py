@@ -2,7 +2,7 @@ from random import randint
 from gtts import gTTS
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 
 
 # Returns the change in value for a stock in percent (Today/Most recent number)
@@ -24,7 +24,7 @@ def get_stock_change(avanza_stock_url):
 
 
 # Creates mp3-file with given text
-rand = randint(0, 1000000)
+rand = 0
 
 def text_to_audio(text):
     global rand
@@ -32,8 +32,6 @@ def text_to_audio(text):
     # file_number = str(randint(0, 1000000))
     tts.save(savefile="static/stock" + str(rand) + ".mp3")
     print("File stock" + str(rand) + ".mp3 created")
-    # Generating new random filename
-    rand = randint(0, 1000000)
 
 
 # Testing/Playing around
@@ -46,7 +44,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', rand=str(rand))
+    resp = make_response(render_template('index.html'))
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
 
 
 # @app.route('/updateStock/')
@@ -56,11 +58,14 @@ def index():
 #         "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
 #     return "Stock audio updated!"
 
-@app.route('/updateStock/')
-def update_stock():
+@app.route('/updateStock/<rand_num>')
+def update_stock(rand_num):
+    global rand
+    rand = rand_num
     text_to_audio(str(randint(0, 20)))
-    return 'WDADADA'
+    return str(rand)
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.160')
+    # app.run(host='192.168.1.160')
+    app.run(host='localhost')

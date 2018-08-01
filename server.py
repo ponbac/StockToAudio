@@ -25,22 +25,48 @@ def clear_audio_folder():
         os.makedirs(folder)
 
 
+# Read stocks.txt to get what stocks to read
+def read_stocks_file():
+    # Create default stocks.txt if none exists
+    if not os.path.isfile(os.getcwd() + '/stocks.txt'):
+        print('Creating stocks.txt')
+        stocks_file_new = open('stocks.txt', 'w+')
+        stocks_file_new.write('https://www.avanza.se/aktier/om-aktien.html/3986/amazon-com-inc\n')  # Amazon
+        stocks_file_new.write('https://www.avanza.se/aktier/om-aktien.html/185896/netflix-inc\n')  # Netflix
+        stocks_file_new.write('https://www.avanza.se/aktier/om-aktien.html/350795/facebook-inc')  # Facebook
+
+    stocks_file = open('stocks.txt', 'rt')
+    stocks = []
+    for line in stocks_file.readlines():
+        stocks.append(line)
+
+    return stocks
+
+
 # Returns the change in value for a stock in percent (Today/Most recent number)
 # https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
-def get_stock_change(avanza_stock_url):
-    url = avanza_stock_url
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, "html.parser")
+def get_stock_change(avanza_stocks):
+    clean_stock_data = ""
+    for stock in avanza_stocks:
+        url = stock
+        page = requests.get(url)
+        soup = BeautifulSoup(page.content, "html.parser")
 
-    # TODO: NEED CHANGE! Band-aid fix to make function work regardless of positive/negative in html class name.
-    try:
-        change_box = soup.find('span', attrs={'class': 'changePercent SText bold positive'})
-        change = change_box.text
-    except AttributeError:
-        change_box = soup.find('span', attrs={'class': 'changePercent SText bold negative'})
-        change = change_box.text
+        # TODO: NEED CHANGE! Band-aid fix to make function work regardless of positive/negative in html class name.
+        try:
+            change_box = soup.find('span', attrs={'class': 'changePercent SText bold positive'})
+            change = change_box.text
+            name_box = soup.find('h1', attrs={'class': 'large marginBottom10px'})
+            name = name_box.text
+        except AttributeError:
+            change_box = soup.find('span', attrs={'class': 'changePercent SText bold negative'})
+            change = change_box.text
+            name_box = soup.find('h1', attrs={'class': 'large marginBottom10px'})
+            name = name_box.text
 
-    return change[0:-2]
+        clean_stock_data += name + " " + change[0:-2] + " procent "
+
+    return clean_stock_data
 
 
 # Creates mp3-file with given text
@@ -55,10 +81,7 @@ def text_to_audio(text):
     print("File stock" + str(rand) + ".mp3 created")
 
 
-# Testing/Playing around
-# text_to_audio(
-# "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
-
+'''---FLASK PART---'''
 # Flask web-server
 app = Flask(__name__)
 
@@ -79,8 +102,7 @@ def update_stock(rand_num):
     global rand
     rand = rand_num
     print('Updating stock audio file!')
-    text_to_audio(
-        "Storytel: " + get_stock_change('https://www.avanza.se/aktier/om-aktien.html/32576/storytel-b') + " procent")
+    text_to_audio(get_stock_change(read_stocks_file()))
     return "Stock audio updated!" + str(rand)
 
 

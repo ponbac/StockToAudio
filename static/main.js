@@ -1,4 +1,4 @@
-console.log("main.js loaded!")
+//console.log("main.js loaded!")
 
 var randNum = Math.floor((Math.random() * 10000) + 1);
 var sound;
@@ -10,7 +10,7 @@ function loadAudio() {
 
     //Load the sound file (using a source element for expandability)
     var src = document.createElement("source");
-    console.log('Going to read randNum! randNum = ' + randNum);
+    //console.log('Going to read randNum! randNum = ' + randNum);
     src.src = '/static/audio/stock' + randNum + ".mp3";
     soundFile.appendChild(src);
 
@@ -30,7 +30,7 @@ function playAudio(audio, volume) {
     audio.currentTime = 0.01;
     audio.volume = volume;
 
-    console.log('Playing audio!, randNum = ' + randNum);
+    //console.log('Playing audio!, randNum = ' + randNum);
 
     //Due to a bug in Firefox, the audio needs to be played after a delay
     setTimeout(function () {
@@ -40,19 +40,19 @@ function playAudio(audio, volume) {
 
 
 function playSound() {
-    console.log('Playing sound!, randNum = ' + randNum);
+    //console.log('Playing sound!, randNum = ' + randNum);
     loadAudio();
     playAudio(sound, 0.5);
 }
 
 
 function refreshData() {
-    x = 120;  // 120 Seconds
+    x = 60 * 10;  // 10 minutes
 
-    console.log('At playSound(), randNum = ' + randNum);
+    //console.log('At playSound(), randNum = ' + randNum);
     playSound();
     randNum = Math.floor((Math.random() * 10000) + 1);
-    console.log('Set new randNum = ' + randNum);
+    //console.log('Set new randNum = ' + randNum);
     $.getJSON('/updateStock/' + randNum);
 
     setTimeout(refreshData, x * 1000);

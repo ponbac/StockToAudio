@@ -2,7 +2,7 @@
 
 var randNum = Math.floor((Math.random() * 10000) + 1);
 var sound;
-var refreshInterval = 2;
+var refreshInterval = 0.5;
 
 function loadAudio() {
     //Create the audio tag

@@ -38,8 +38,9 @@
         $('button#intervalButton').bind('click', function () {
             $.getJSON('/setInterval/' + document.querySelector('#searchTxt').value,
                 function (data) {
-                    refreshInterval = document.querySelector('#searchTxt').value;
+                    //???
                 });
+            refreshInterval = document.querySelector('#searchTxt').value;
             return false;
         });
     });

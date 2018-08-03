@@ -2,6 +2,7 @@
 
 var randNum = Math.floor((Math.random() * 10000) + 1);
 var sound;
+var refreshInterval = 2;
 
 function loadAudio() {
     //Create the audio tag
@@ -47,7 +48,7 @@ function playSound() {
 
 
 function refreshData() {
-    x = 60 * 10;  // 10 minutes
+    x = 60 * refreshInterval;  // 2 minutes default
 
     //console.log('At playSound(), randNum = ' + randNum);
     playSound();

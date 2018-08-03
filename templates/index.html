@@ -29,5 +29,21 @@
         </a>
     </form>
 </div>
+
+<input name="searchTxt" type="text" maxlength="512" id="searchTxt" class="searchField"/>
+<button id="intervalButton">Set audio interval</button>
+
+<script type=text/javascript>
+    $(function () {
+        $('button#intervalButton').bind('click', function () {
+            $.getJSON('/setInterval/' + document.querySelector('#searchTxt').value,
+                function (data) {
+                    refreshInterval = document.querySelector('#searchTxt').value;
+                });
+            return false;
+        });
+    });
+</script>
+
 </body>
 </html>

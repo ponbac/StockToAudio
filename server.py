@@ -109,5 +109,5 @@ def update_stock(rand_num):
 # Start server
 if __name__ == '__main__':
     clear_audio_folder()
-    app.run(host='192.168.1.160')
+    app.run(host='192.168.1.218')
     # app.run(host='localhost')

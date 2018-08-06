@@ -26,7 +26,7 @@ def clear_audio_folder():
         os.makedirs(folder)
 
 
-# Read stocks.txt to get what stocks to read
+# Read stocks.txt and return array with all the stocks as a Stock-object
 def read_stocks_file():
     # Create default stocks.txt if none exists
     if not os.path.isfile(os.getcwd() + '/stocks.txt'):

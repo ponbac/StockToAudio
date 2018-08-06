@@ -19,17 +19,17 @@ class Stock:
     # Get the stocks name
     def get_name(self):
         name_box = self.soup.find('h1', attrs={'class': 'large marginBottom10px'})
-        return str(name_box.text).replace('\r', '').replace('\n', '').replace('\t', '').strip()
+        return str(name_box.text).replace('\r', '').replace('\n', '').replace('\t', '').strip()  # Returns cleaned name
 
     # Get the value change for today in percent
     def get_value_change(self):
         # TODO: NEED CHANGE! Band-aid fix to make function work regardless of positive/negative in html class name.
         try:
             change_box = self.soup.find('span', attrs={'class': 'changePercent SText bold positive'})
-            return change_box.text[0:-2] + '%'
+            return change_box.text[0:-2] + '%'  # Return example '+2,43%'
         except AttributeError:
             change_box = self.soup.find('span', attrs={'class': 'changePercent SText bold negative'})
-            return change_box.text[0:-2] + '%'
+            return change_box.text[0:-2] + '%'  # Return example '-1,37%'
 
     # Update values that change over time
     def update(self):

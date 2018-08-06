@@ -1,9 +1,10 @@
-from random import randint
 from gtts import gTTS
-import requests
-from bs4 import BeautifulSoup
 from flask import Flask, render_template, make_response
 import os
+from stock import Stock
+
+# TODO: Test if application works without random file names
+rand = 0  # Stores random number from main.js
 
 
 # Clear audio folder or create one if it doesnt exist
@@ -37,46 +38,28 @@ def read_stocks_file():
 
     stocks_file = open('stocks.txt', 'rt')
     stocks = []
-    for line in stocks_file.readlines():
-        stocks.append(line)
+    for url in stocks_file.readlines():
+        stocks.append(Stock(url))
 
     return stocks
 
 
-# Returns the change in value for a stock in percent (Today/Most recent number)
-# https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
-def get_stock_change(avanza_stocks):
-    clean_stock_data = ""
-    for stock in avanza_stocks:
-        url = stock
-        page = requests.get(url)
-        soup = BeautifulSoup(page.content, "html.parser")
+# Generate string that holds all the stock names + value changes
+def generate_stock_list(stocks):
+    stock_list = ''  # String to hold all the data
 
-        # TODO: NEED CHANGE! Band-aid fix to make function work regardless of positive/negative in html class name.
-        try:
-            change_box = soup.find('span', attrs={'class': 'changePercent SText bold positive'})
-            change = change_box.text
-            name_box = soup.find('h1', attrs={'class': 'large marginBottom10px'})
-            name = name_box.text
-        except AttributeError:
-            change_box = soup.find('span', attrs={'class': 'changePercent SText bold negative'})
-            change = change_box.text
-            name_box = soup.find('h1', attrs={'class': 'large marginBottom10px'})
-            name = name_box.text
+    # Update every stock and add it to the string (stock_list)
+    for stock in stocks:
+        stock.update()
+        stock_list += stock.name + ' ' + stock.value_change + ' '
 
-        clean_stock_data += name + " " + change[0:-2] + " procent "
-
-    return clean_stock_data
+    return stock_list
 
 
 # Creates mp3-file with given text
-rand = 0  # Stores random number from main.js
-
-
 def text_to_audio(text):
     global rand
     tts = gTTS(text=text, lang='sv')
-    # file_number = str(randint(0, 1000000))
     tts.save(savefile="static/audio/stock" + str(rand) + ".mp3")
     print("File stock" + str(rand) + ".mp3 created")
 
@@ -102,12 +85,14 @@ def update_stock(rand_num):
     global rand
     rand = rand_num
     print('Updating stock audio file!')
-    text_to_audio(get_stock_change(read_stocks_file()))
+    text_to_audio(generate_stock_list(stocks_to_follow))
     return "Stock audio updated!" + str(rand)
 
 
-# Start server
+# main
 if __name__ == '__main__':
+    # init (clear audio folder and get the stocks to follow)
     clear_audio_folder()
-    app.run(host='192.168.1.218')
-    # app.run(host='localhost')
+    stocks_to_follow = read_stocks_file()
+    # start the flask server
+    app.run(host='localhost')

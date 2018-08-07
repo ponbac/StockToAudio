@@ -64,9 +64,9 @@ def text_to_audio(text):
     print("File stock" + str(rand) + ".mp3 created")
 
 
+# TODO: server.py to only contain code below, code above in different file
 '''---FLASK PART---'''
-# Flask web-server
-app = Flask(__name__)
+app = Flask(__name__)  # create Flask-object
 
 
 # Index

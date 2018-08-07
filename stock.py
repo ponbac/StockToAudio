@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 
 # https://medium.freecodecamp.org/how-to-scrape-websites-with-python-and-beautifulsoup-5946935d93fe
 
+# TODO: Try to get real time updates from avanza https://github.com/fhqvst/avanza and https://github.com/donnex/pyavanza
+
 
 class Stock:
     def __init__(self, avanza_url):
